@@ -7,6 +7,17 @@ is_done = False
 
 
 def generate_a_valid_board(board, curr_i, curr_j):
+    '''
+    This program fills in the empty cells of the sudoku board (an empty cell will have a value of 0). It needs to fill out an entire valid
+    sudoku board before picking out 'k' cells to empty them, just to make sure that the sudoku board is solvable. It does this by iterating
+    through each cell in the sudoku board, using 'curr_i' and 'curr_j'. It then finds which sector of the board the two points are in 
+    (since it is a 9 x 9 celled - sudoku - board, which 9 sectors) using 'trackings',
+
+    It then creates a list of all numbers from one to 10 (not - inclusive), and finds a number to fill a cell, given that is satisfies the
+    given contraints: the number is not repeated in its sector, row, or column. Once a number is found, it goes to the next cell in the row,
+    or, if that row has already been filled out, the first cell in the next column. It keeps on recursing until a valid board is found, 
+    where then the valid board will be appended to 'ans_board'. All recursion call stacks will stop, then.
+    '''
     trackings = {
         1: ((0, 3), (0, 3)),
         2: ((0, 3), (3, 6)),
@@ -19,14 +30,19 @@ def generate_a_valid_board(board, curr_i, curr_j):
         9: ((6, 9), (6, 9)),
     }
     global is_done, ans_board
+    #If a valid board is found, stop all recursion calls.
     if is_done == True:
         return
+
+    #If a valid board is found, stop all recursion calls.
     if curr_i == 9:
         for i in range(len(board)):
             ans_board.append(board[i].copy())
         is_done = True
         return
     sub_grid = -1
+    
+    #Finding which sector the two points are in (in the board).
     for key in trackings:
         i_ranges = trackings[key][0]
         j_ranges = trackings[key][1]
@@ -63,6 +79,8 @@ board = [[0 for _ in range(9)] for _ in range(9)]
 generate_a_valid_board(board, 0, 0)
 
 
+#Once we have gotten our valid board, the program then proceeds to picking out 'k' random points off the board for the user to fill in. You
+#may change the value of 'k', but, as default, I have left it as 30. Thus, 30 cells will be unfilled, and must be filled in by the user.
 board = ans_board
 k = 30
 while k > 0:
@@ -80,6 +98,10 @@ my_canvas.setLineWidth(1)
 
 
 def draw_out_board(board):
+    '''
+    This program is used to carve out the sudoku board in the blank pdf file. I have basically just combined a bunch of math and logic to
+    to carve out the board, and I have forgotten the magic behind it. You can just ignore this. 
+    '''
     starting_x = 15
     starting_y = 240
     for row in board:
